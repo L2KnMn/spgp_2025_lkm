@@ -19,4 +19,9 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = findViewById(R.id.mainTextView);
         tv.setText("Main Button Clicked");
     }
+
+    public void onPushMeClick(View view) {
+        TextView tv = findViewById(R.id.mainTextView);
+        tv.setText("PushMe Button Clicked");
+    }
 }
