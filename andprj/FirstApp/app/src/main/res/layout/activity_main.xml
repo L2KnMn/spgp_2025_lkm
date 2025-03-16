@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Main Button"
         android:id="@+id/mainButton"
+        android:onClick="onMainButtonClick"
         />
 
 </LinearLayout>
