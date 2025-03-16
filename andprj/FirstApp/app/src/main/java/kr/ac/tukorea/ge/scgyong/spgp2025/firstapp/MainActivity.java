@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,18 +16,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button button;
         button = findViewById(R.id.mainButton);
-        button.setOnClickListener(this);
+        button.setOnClickListener(m_mainButtonListener);
         button = findViewById(R.id.pushMeButton);
-        button.setOnClickListener(this);
+        button.setOnClickListener(m_pushMeButtonListener);
     }
-
-    @Override
-    public void onClick(View view) {
-        TextView tv = findViewById(R.id.mainTextView);
-        if (view.getId() == R.id.mainButton) {
+    private View.OnClickListener m_mainButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            TextView tv = findViewById(R.id.mainTextView);
             tv.setText("Main Button Clicked");
-        } else {
+        }
+    };
+    private View.OnClickListener m_pushMeButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            TextView tv = findViewById(R.id.mainTextView);
             tv.setText("PushMe Button Clicked");
         }
-    }
+    };
 }
