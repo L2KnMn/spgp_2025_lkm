@@ -13,15 +13,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    public void onMainButtonClick(View view) {
-        TextView tv = findViewById(R.id.mainTextView);
-        tv.setText("Main Button Clicked");
-    }
+        Button button;
+        button = findViewById(R.id.mainButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView tv = findViewById(R.id.mainTextView);
+                tv.setText("Main Button Clicked");
+            }
+        });
 
-    public void onPushMeClick(View view) {
-        TextView tv = findViewById(R.id.mainTextView);
-        tv.setText("PushMe Button Clicked");
+        button = findViewById(R.id.pushMeButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView tv = findViewById(R.id.mainTextView);
+                tv.setText("PushMe Button Clicked");
+            }
+        });
     }
 }
