@@ -10,7 +10,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:rotation="10"
+        android:rotationX="30"
         android:text="SPGP 2025"
+        android:textColor="#8E0404"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
