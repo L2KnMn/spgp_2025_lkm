@@ -6,6 +6,10 @@ android {
     namespace = "kr.ac.tukorea.ge.scgyong.spgp2025.firstapp"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "kr.ac.tukorea.ge.scgyong.spgp2025.firstapp"
         minSdk = 24
