@@ -9,29 +9,34 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity  {
 
+    private TextView mainTextView;
+    private Button mainButton;
+    private Button pushMeButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button;
-        button = findViewById(R.id.mainButton);
-        button.setOnClickListener(m_mainButtonListener);
-        button = findViewById(R.id.pushMeButton);
-        button.setOnClickListener(m_pushMeButtonListener);
+        mainTextView = findViewById(R.id.mainTextView);
+
+        mainButton = findViewById(R.id.mainButton);
+        mainButton.setOnClickListener(m_mainButtonListener);
+
+        pushMeButton = findViewById(R.id.pushMeButton);
+        pushMeButton.setOnClickListener(m_pushMeButtonListener);
     }
+
     private View.OnClickListener m_mainButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            TextView tv = findViewById(R.id.mainTextView);
-            tv.setText("Main Button Clicked");
+            mainTextView.setText("Main Button Clicked");
         }
     };
     private View.OnClickListener m_pushMeButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            TextView tv = findViewById(R.id.mainTextView);
-            tv.setText("PushMe Button Clicked");
+            mainTextView.setText("PushMe Button Clicked");
         }
     };
 }
