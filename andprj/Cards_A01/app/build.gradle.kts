@@ -6,6 +6,9 @@ android {
     namespace = "kr.ac.tukorea.ge.and.scgyong.cardsa01"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
     defaultConfig {
         applicationId = "kr.ac.tukorea.ge.and.scgyong.cardsa01"
         minSdk = 24
