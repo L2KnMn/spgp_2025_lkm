@@ -6,16 +6,21 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import kr.ac.tukorea.ge.and.scgyong.cardsa01.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton previousCardButton;
+    private @NonNull ActivityMainBinding ui;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ui = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(ui.getRoot());
     }
 
     public void onBtnCard(View view) {
