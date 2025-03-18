@@ -22,10 +22,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "Button Clicked: ID=" + view.getId());
         //Toast.makeText(this, "BTN ID=" + view.getId(), Toast.LENGTH_SHORT).show();
 
+        if (previousCardButton != null) {
+            previousCardButton.setImageResource(R.mipmap.card_blue_back);
+        }
+
         ImageButton btn = (ImageButton) view;
         btn.setImageResource(R.mipmap.card_as);
 
-        previousCardButton.setImageResource(R.mipmap.card_blue_back);
         previousCardButton = btn;
     }
 }
