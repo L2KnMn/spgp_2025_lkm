@@ -18,6 +18,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:src="@mipmap/card_blue_back"
+            android:scaleType="fitCenter"
             android:onClick="onBtnCard"
             />
         <ImageButton
