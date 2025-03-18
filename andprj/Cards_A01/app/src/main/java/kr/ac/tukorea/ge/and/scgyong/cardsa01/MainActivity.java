@@ -1,12 +1,10 @@
 package kr.ac.tukorea.ge.and.scgyong.cardsa01;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,5 +12,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    public void onBtnCard(View view) {
+        Log.d("MainActivity", "Button Clicked: ID=" + view.getId());
     }
 }
