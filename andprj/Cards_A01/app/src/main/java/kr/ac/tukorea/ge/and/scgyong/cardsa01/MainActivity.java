@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onBtnCard(View view) {
         Log.d("MainActivity", "Button Clicked: ID=" + view.getId());
-        Toast.makeText(this, "BTN ID=" + view.getId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "BTN ID=" + view.getId(), Toast.LENGTH_SHORT).show();
     }
 }
