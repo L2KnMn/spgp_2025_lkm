@@ -48,9 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void setFlips(int flips) {
         Resources res = getResources();
-        String fmt = res.getString(R.string.score_fmt);
         this.flips = flips;
-        String text = String.format(fmt, this.flips);
+        String text = res.getString(R.string.score_fmt, this.flips);
         ui.scoreTextView.setText(text);
     }
 
@@ -82,21 +81,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onBtnRestart(View view){
-        askRestart();
-    }
-
-    private void askRestart() {
-        new AlertDialog.Builder(this).setTitle("Restart")
-                .setMessage("Are you sure you want to restart?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startGame();
-            }
-        }).setNegativeButton("No", null).create().show();
-    }
-
     public void onBtnCard(View view) {
         Log.d("MainActivity", "Button Clicked: ID=" + view.getId());
         //Toast.makeText(this, "BTN ID=" + view.getId(), Toast.LENGTH_SHORT).show();
@@ -115,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
             previousCardButton.setVisibility(View.INVISIBLE);
             previousCardButton = null;
             openCardCount -= 2;
-            if(openCardCount == 0){
+            if (openCardCount == 0) {
+                //onBtnRestart(null);
                 askRestart();
             }
         } else {
@@ -124,5 +109,24 @@ public class MainActivity extends AppCompatActivity {
 
             setFlips(flips + 1);
         }
+    }
+
+    public void onBtnRestart(View view) {
+        askRestart();
+    }
+
+    private void askRestart() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.restart_dlg_title)
+                .setMessage(R.string.restart_dlg_message)
+                .setPositiveButton(R.string.restart_dlg_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startGame();
+                    }
+                })
+                .setNegativeButton(R.string.restart_dlg_no, null)
+                .create()
+                .show();
     }
 }
