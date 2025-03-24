@@ -49,25 +49,24 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, "BTN ID=" + view.getId(), Toast.LENGTH_SHORT).show();
 
         int previousCardResourceId = 0;
-
         if (previousCardButton != null) {
             previousCardButton.setImageResource(R.mipmap.card_blue_back);
-            previousCardResourceId = (Integer) previousCardButton.getTag();
+            previousCardResourceId = (Integer)previousCardButton.getTag();
         }
 
         ImageButton btn = (ImageButton) view;
         int resId = (Integer) btn.getTag();
 
-        if(resId == previousCardResourceId) {
+        if (resId == previousCardResourceId) {
             btn.setVisibility(View.INVISIBLE);
             previousCardButton.setVisibility(View.INVISIBLE);
             previousCardButton = null;
-        }else{
+        } else {
             btn.setImageResource(resId);
             previousCardButton = btn;
 
             flips += 1;
-            String text = String.format("Flips : %d", flips);
+            String text = String.format("Flips: %d", flips);
             ui.scoreTextView.setText(text);
         }
     }
