@@ -1,11 +1,13 @@
 package kr.ac.tukorea.ge.and.scgyong.cardsa01;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     };
     private ImageButton[] cardButtons;
     private int flips;
+    private int openCardCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         previousCardButton = null;
         setFlips(0);
+        openCardCount = cardResIds.length;
     }
 
     private void shuffleCards() {
@@ -76,7 +80,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnRestart(View view){
-        startGame();
+        askRestart();
+    }
+
+    private void askRestart() {
+        new AlertDialog.Builder(this).setTitle("Restart")
+                .setMessage("Are you sure you want to restart?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startGame();
+            }
+        }).setNegativeButton("No", null).create().show();
     }
 
     public void onBtnCard(View view) {
@@ -96,10 +111,13 @@ public class MainActivity extends AppCompatActivity {
             btn.setVisibility(View.INVISIBLE);
             previousCardButton.setVisibility(View.INVISIBLE);
             previousCardButton = null;
+            openCardCount -= 2;
+            if(openCardCount == 0){
+                askRestart();
+            }
         } else {
             btn.setImageResource(resId);
             previousCardButton = btn;
-
             setFlips(flips + 1);
         }
     }
