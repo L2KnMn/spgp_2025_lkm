@@ -24,8 +24,7 @@
         android:onClick="pageLeft"
         android:text="&lt;"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/rightButton"
@@ -34,8 +33,7 @@
         android:onClick="pageRight"
         android:text="&gt;"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
