@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             btn.setImageResource(resId);
             previousCardButton = btn;
+
             setFlips(flips + 1);
         }
     }
