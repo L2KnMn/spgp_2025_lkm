@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         previousCardButton = null;
+
         flips = 0;
         String text = String.format("Flips: %d", flips);
         ui.scoreTextView.setText(text);
