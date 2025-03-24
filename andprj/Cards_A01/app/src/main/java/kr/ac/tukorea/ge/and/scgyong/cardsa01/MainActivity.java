@@ -39,14 +39,25 @@ public class MainActivity extends AppCompatActivity {
                 ui.card30, ui.card31, ui.card32, ui.card33,
         };
 
+        startGame();
+    }
+
+    private void startGame() {
         //shuffleCards();
 
         for (int i = 0; i < cardResIds.length; i++) {
             ImageButton btn = cardButtons[i];
+            btn.setImageResource(R.mipmap.card_blue_back);
+            btn.setVisibility(View.VISIBLE);
             int resId = cardResIds[i];
             Integer resourceIdInteger = resId;
             btn.setTag(resourceIdInteger);
         }
+
+        previousCardButton = null;
+        flips = 0;
+        String text = String.format("Flips: %d", flips);
+        ui.scoreTextView.setText(text);
     }
 
     private void shuffleCards() {
@@ -58,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
             cardResIds[i] = cardResIds[r];
             cardResIds[r] = resId;
         }
+    }
+
+    public void onBtnRestart(View view){
+        startGame();
     }
 
     public void onBtnCard(View view) {
