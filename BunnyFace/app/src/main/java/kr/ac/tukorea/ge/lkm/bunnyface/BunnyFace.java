@@ -1,27 +1,30 @@
 package kr.ac.tukorea.ge.lkm.bunnyface;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.Path;
+import android.view.MotionEvent;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.content.res.Resources;
 import android.view.View;
 
 /**
  * TODO: document your custom view class.
  */
-public class BunnyFace extends View {
-    private String mExampleString; // TODO: use a default from R.string...
-    private int mExampleColor = Color.RED; // TODO: use a default from R.color...
-    private float mExampleDimension = 0; // TODO: use a default from R.dimen...
-    private Drawable mExampleDrawable;
+public class BunnyFace extends View implements View.OnClickListener, View.OnLongClickListener  {
+    private static final String TAG = "BunnyFace";
 
-    private TextPaint mTextPaint;
-    private float mTextWidth;
-    private float mTextHeight;
+    private enum State {
+        IDLE, SMILE, HAPPY, PETTED
+    }
+
+    private State state = State.IDLE;
+    private Paint paintFace;
+    private Paint paintEye;
+    private Paint paintEar;
+    private Paint paintHead;
 
     public BunnyFace(Context context) {
         super(context);
@@ -39,151 +42,143 @@ public class BunnyFace extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        // Load attributes
-        final TypedArray a = getContext().obtainStyledAttributes(
-                attrs, R.styleable.BunnyFace, defStyle, 0);
+        setOnLongClickListener(this);
+        setOnClickListener(this);
 
-        mExampleString = a.getString(
-                R.styleable.BunnyFace_exampleString);
-        mExampleColor = a.getColor(
-                R.styleable.BunnyFace_exampleColor,
-                mExampleColor);
-        // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-        // values that should fall on pixel boundaries.
-        mExampleDimension = a.getDimension(
-                R.styleable.BunnyFace_exampleDimension,
-                mExampleDimension);
+        Resources res = getContext().getResources();
 
-        if (a.hasValue(R.styleable.BunnyFace_exampleDrawable)) {
-            mExampleDrawable = a.getDrawable(
-                    R.styleable.BunnyFace_exampleDrawable);
-            mExampleDrawable.setCallback(this);
-        }
+        paintFace = new Paint();
+        paintFace.setColor(res.getColor(R.color.bunny_face, null));
+        paintFace.setStyle(Paint.Style.FILL);
 
-        a.recycle();
+        paintEye = new Paint();
+        paintEye.setColor(res.getColor(R.color.bunny_eye, null));
+        paintEye.setStrokeWidth(0.04f);
+        paintEye.setStyle(Paint.Style.STROKE);
 
-        // Set up a default TextPaint object
-        mTextPaint = new TextPaint();
-        mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextAlign(Paint.Align.LEFT);
+        paintHead = new Paint();
+        paintHead.setColor(res.getColor(R.color.bunny_head, null));
+        paintHead.setStyle(Paint.Style.FILL);
 
-        // Update TextPaint and text measurements from attributes
-        invalidateTextPaintAndMeasurements();
-    }
-
-    private void invalidateTextPaintAndMeasurements() {
-        mTextPaint.setTextSize(mExampleDimension);
-        mTextPaint.setColor(mExampleColor);
-        mTextWidth = mTextPaint.measureText(mExampleString);
-
-        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-        mTextHeight = fontMetrics.bottom;
+        paintEar = new Paint();
+        paintEar.setColor(res.getColor(R.color.bunny_ear, null));
+        paintEar.setStyle(Paint.Style.FILL);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // TODO: consider storing these as member variables to reduce
-        // allocations per draw cycle.
-        int paddingLeft = getPaddingLeft();
-        int paddingTop = getPaddingTop();
-        int paddingRight = getPaddingRight();
-        int paddingBottom = getPaddingBottom();
+        int l = getPaddingLeft(), r = getPaddingRight();
+        int t = getPaddingTop(), b = getPaddingBottom();
+        int w = getWidth(), h = getHeight();
+        int contentWidth = (w - l - r);
+        int contentHeight = (h - t - b);
+        int contentSize = Math.min(contentWidth, contentHeight);
 
-        int contentWidth = getWidth() - paddingLeft - paddingRight;
-        int contentHeight = getHeight() - paddingTop - paddingBottom;
+        int cx = l + contentWidth / 2;
+        int cy = t + contentHeight / 2;
+        int radius;
+        radius = contentSize / 2;
 
-        // Draw the text.
-        canvas.drawText(mExampleString,
-                paddingLeft + (contentWidth - mTextWidth) / 2,
-                paddingTop + (contentHeight + mTextHeight) / 2,
-                mTextPaint);
+        canvas.drawColor(0xffece6cc);
+        drawHead(canvas, cx, cy, radius);
+    }
 
-        // Draw the example drawable on top of the text.
-        if (mExampleDrawable != null) {
-            mExampleDrawable.setBounds(paddingLeft, paddingTop,
-                    paddingLeft + contentWidth, paddingTop + contentHeight);
-            mExampleDrawable.draw(canvas);
+    private void drawHead(Canvas canvas, float x, float y, float r){
+        canvas.save();
+        canvas.translate(x, y);
+        canvas.scale(r, r);
+//        canvas.drawCircle(0, 0, 1, paint);
+        drawEars(canvas);
+        canvas.drawArc(-1, 0, 1, 2, 180, 180, true, paintHead);
+        canvas.drawArc(-0.9f, 0.2f, 0.9f, 1.8f, 180, 180, true, paintFace);
+        drawEyes(canvas);
+        canvas.restore();
+    }
+
+    private void drawHeart(Canvas canvas, float x, float y, float r){
+        Path path = new Path();
+        path.moveTo(x, y - r * 0.4f);
+        // 왼쪽 곡선 (Bezier 곡선 사용)
+        // 첫번째 control point는 좌측 상단으로 크게 뻗어 하트 왼쪽 로브의 볼륨을 극대화합니다.
+        path.cubicTo(x - r * 1.4f, y - r * 1.8f,   // 좌측 상단 control point
+                x - r * 1.4f, y + r * 0.4f,    // 좌측 하단 control point
+                x, y + r);                    // 하단의 끝점 (심장 밑)
+        // 오른쪽 곡선 (Bezier 곡선 사용)
+        // 좌측 곡선과 대칭되도록 control point들을 동일 계수로 설정합니다.
+        path.cubicTo(x + r * 1.4f, y + r * 0.4f,    // 우측 하단 control point
+                x + r * 1.4f, y - r * 1.8f,    // 우측 상단 control point
+                x, y - r * 0.4f);              // 시작점(골 부분)으로 돌아와 깊은 노치 완성
+        path.close();
+        canvas.drawPath(path, paintEye);
+    }
+
+    private void drawEyes(Canvas canvas) {
+        final float eyeX = 0.5f;
+        final float eyeY = 0.75f;
+        final float r = 0.2f;
+
+        if(state == State.IDLE) {
+            canvas.drawCircle(-eyeX, eyeY, r, paintEye);
+            canvas.drawCircle(eyeX, eyeY, r, paintEye);
+        }else if(state == State.SMILE){
+            canvas.drawArc(-eyeX -r, eyeY-r, -eyeX +r, eyeY+r, 180, 180, false, paintEye);
+            canvas.drawArc(eyeX -r, eyeY-r, eyeX +r, eyeY+r, 180, 180, false, paintEye);
+        }else if(state == State.HAPPY){
+            // 하트 그리기
+            drawHeart(canvas, -eyeX, eyeY, r);
+            drawHeart(canvas, eyeX, eyeY, r);
+        }else if(state == State.PETTED){
+            Path path = new Path();
+            path.moveTo(-eyeX - r, eyeY);
+            path.lineTo(-eyeX + r, eyeY);
+            path.moveTo(eyeX - r, eyeY);
+            path.lineTo(eyeX + r, eyeY);
+            path.close();
+            canvas.drawPath(path, paintEye);
         }
     }
 
-    /**
-     * Gets the example string attribute value.
-     *
-     * @return The example string attribute value.
-     */
-    public String getExampleString() {
-        return mExampleString;
+    private void drawEars(Canvas canvas){
+        final float width = 0.4f;
+        final float height = 1.5f;
+        canvas.drawOval(-0.5f-width/2, -1f, -0.5f+width/2, 0.5f, paintHead);
+        canvas.drawOval(-0.5f-width/2*0.7f, -0.8f, -0.5f+width/2*0.7f, 0.5f, paintEar);
+        canvas.drawOval(0.5f-width/2, -1f, 0.5f+width/2, 0.5f, paintHead);
+        canvas.drawOval(0.5f-width/2*0.7f, -0.8f, 0.5f+width/2*0.7f, 0.5f, paintEar);
     }
 
-    /**
-     * Sets the view"s example string attribute value. In the example view, this string
-     * is the text to draw.
-     *
-     * @param exampleString The example string attribute value to use.
-     */
-    public void setExampleString(String exampleString) {
-        mExampleString = exampleString;
-        invalidateTextPaintAndMeasurements();
+    @Override
+    public void onClick(View v) {
+        Log.d(TAG, "onClick");
+        boolean handled = false;
+        switch (state) {
+            case IDLE:
+                state = State.SMILE;
+                handled = true;
+                break;
+            case SMILE:
+                state = State.IDLE;
+                handled = true;
+                break;
+            case HAPPY:
+                state = State.IDLE;
+                handled = true;
+                break;
+            default:
+                break;
+        }
+        if (handled) {
+            invalidate();
+        }
     }
 
-    /**
-     * Gets the example color attribute value.
-     *
-     * @return The example color attribute value.
-     */
-    public int getExampleColor() {
-        return mExampleColor;
-    }
-
-    /**
-     * Sets the view"s example color attribute value. In the example view, this color
-     * is the font color.
-     *
-     * @param exampleColor The example color attribute value to use.
-     */
-    public void setExampleColor(int exampleColor) {
-        mExampleColor = exampleColor;
-        invalidateTextPaintAndMeasurements();
-    }
-
-    /**
-     * Gets the example dimension attribute value.
-     *
-     * @return The example dimension attribute value.
-     */
-    public float getExampleDimension() {
-        return mExampleDimension;
-    }
-
-    /**
-     * Sets the view"s example dimension attribute value. In the example view, this dimension
-     * is the font size.
-     *
-     * @param exampleDimension The example dimension attribute value to use.
-     */
-    public void setExampleDimension(float exampleDimension) {
-        mExampleDimension = exampleDimension;
-        invalidateTextPaintAndMeasurements();
-    }
-
-    /**
-     * Gets the example drawable attribute value.
-     *
-     * @return The example drawable attribute value.
-     */
-    public Drawable getExampleDrawable() {
-        return mExampleDrawable;
-    }
-
-    /**
-     * Sets the view"s example drawable attribute value. In the example view, this drawable is
-     * drawn above the text.
-     *
-     * @param exampleDrawable The example drawable attribute value to use.
-     */
-    public void setExampleDrawable(Drawable exampleDrawable) {
-        mExampleDrawable = exampleDrawable;
+    @Override
+    public boolean onLongClick(View v) {
+        Log.d(TAG, "onLongClick");
+        state = State.HAPPY;
+        invalidate();
+        return true;
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
+        android:id="@+id/bunny_face"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:paddingBottom="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
+        android:id="@+id/bunny_face2"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bunny_face"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
