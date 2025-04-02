@@ -10,10 +10,9 @@ import android.util.Log;
 import android.content.res.Resources;
 import android.view.View;
 
-/**
- * TODO: document your custom view class.
- */
-public class BunnyFace extends View implements View.OnClickListener, View.OnLongClickListener  {
+import androidx.annotation.NonNull;
+
+public class BunnyFace extends View implements View.OnTouchListener {
     private static final String TAG = "BunnyFace";
 
     private enum State {
@@ -25,6 +24,8 @@ public class BunnyFace extends View implements View.OnClickListener, View.OnLong
     private Paint paintEye;
     private Paint paintEar;
     private Paint paintHead;
+
+    private float animationProgress = 0.0f;
 
     public BunnyFace(Context context) {
         super(context);
@@ -42,8 +43,7 @@ public class BunnyFace extends View implements View.OnClickListener, View.OnLong
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        setOnLongClickListener(this);
-        setOnClickListener(this);
+        setOnTouchListener(this);
 
         Resources res = getContext().getResources();
 
@@ -66,7 +66,7 @@ public class BunnyFace extends View implements View.OnClickListener, View.OnLong
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         int l = getPaddingLeft(), r = getPaddingRight();
@@ -85,15 +85,34 @@ public class BunnyFace extends View implements View.OnClickListener, View.OnLong
         drawHead(canvas, cx, cy, radius);
     }
 
+    float motion_speed = 0.05f;
+    private void animatePetting() {
+        animationProgress += motion_speed;
+        if(animationProgress >= 1.0f) {
+            motion_speed *= -1;
+        }else if (animationProgress <= -1.0f){
+            motion_speed *= -1;
+        }
+    }
+
     private void drawHead(Canvas canvas, float x, float y, float r){
         canvas.save();
         canvas.translate(x, y);
         canvas.scale(r, r);
-//        canvas.drawCircle(0, 0, 1, paint);
+        // animation code 넣기
+        canvas.save();
+        canvas.translate(0.1f * animationProgress, 0 * animationProgress);
         drawEars(canvas);
+        canvas.restore();
+        // 원복
         canvas.drawArc(-1, 0, 1, 2, 180, 180, true, paintHead);
         canvas.drawArc(-0.9f, 0.2f, 0.9f, 1.8f, 180, 180, true, paintFace);
+        // 마찬가지
+        canvas.save();
+        canvas.translate(0.1f * animationProgress, 0 * animationProgress);
         drawEyes(canvas);
+        canvas.restore();
+        // 원복
         canvas.restore();
     }
 
@@ -149,8 +168,50 @@ public class BunnyFace extends View implements View.OnClickListener, View.OnLong
         canvas.drawOval(0.5f-width/2*0.7f, -0.8f, 0.5f+width/2*0.7f, 0.5f, paintEar);
     }
 
+    private float previousTouchX = 0;
+    private float previousTouchY = 0;
+
     @Override
-    public void onClick(View v) {
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // 터치 다운 이벤트 발생
+                System.out.println("Touch down!");
+                previousTouchX = event.getX();
+                previousTouchY = event.getY();
+                return true; // 이벤트 처리 미완료
+            case MotionEvent.ACTION_UP:
+                // 터치 업 이벤트 발생 (클릭으로 간주될 수 있음)
+                System.out.println("Touch up!");
+                chageStateAtTouch(); // 클릭 이벤트 발생 처리
+                previousTouchX = 0;
+                previousTouchY = 0;
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                // 터치 이동 이벤트 발생
+                float dx = event.getX() - previousTouchX;
+                float dy = event.getY() - previousTouchY;
+                previousTouchX = event.getX();
+                previousTouchY = event.getY();
+                if(state == State.PETTED){
+                    // 쓰다듬기 이벤트 발생 코드 나중에 쓰다듬은 거리에 따라 귀 눈 움직이게 구현
+                    Log.d(TAG, "Petting");
+                    if(state == State.PETTED)
+                        animatePetting();
+                    invalidate();
+                }else if(dx != 0 || dy != 0) {
+                    state = State.PETTED;
+                }
+                return true;
+            case MotionEvent.ACTION_CANCEL:
+                state = State.IDLE;
+                animationProgress = 0.0f;
+                break;
+        }
+        return false;
+    }
+
+    private void chageStateAtTouch() {
         Log.d(TAG, "onClick");
         boolean handled = false;
         switch (state) {
@@ -159,26 +220,24 @@ public class BunnyFace extends View implements View.OnClickListener, View.OnLong
                 handled = true;
                 break;
             case SMILE:
-                state = State.IDLE;
+                state = State.HAPPY;
                 handled = true;
                 break;
             case HAPPY:
                 state = State.IDLE;
                 handled = true;
                 break;
+            case PETTED:
+                state = State.IDLE;
+                animationProgress = 0.0f;
+                handled = true;
+                break;
             default:
+                Log.d(TAG, "Unknown state");
                 break;
         }
         if (handled) {
             invalidate();
         }
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        Log.d(TAG, "onLongClick");
-        state = State.HAPPY;
-        invalidate();
-        return true;
     }
 }

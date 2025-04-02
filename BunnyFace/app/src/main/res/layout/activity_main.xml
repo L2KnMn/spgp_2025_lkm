@@ -7,21 +7,22 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
-        android:id="@+id/bunny_face"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:paddingBottom="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
-        android:id="@+id/bunny_face2"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bunny_face"
-        />
-
+        android:layout_height="match_parent">
+        <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
+            android:id="@+id/bunny_face"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            />
+        <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
+            android:id="@+id/bunny_face2"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="1"
+            android:padding="10dp"
+            />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

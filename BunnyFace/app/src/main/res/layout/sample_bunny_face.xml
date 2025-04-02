@@ -5,17 +5,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-    <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:paddingLeft="20dp"
-        android:paddingBottom="40dp"/>
-    <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:paddingLeft="20dp"
-        android:paddingBottom="40dp"/>
+        android:layout_height="match_parent">
+        <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
+            android:id="@+id/bunny_face"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            />
+        <kr.ac.tukorea.ge.lkm.bunnyface.BunnyFace
+            android:id="@+id/bunny_face2"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="1"
+            android:padding="10dp"
+            />
     </LinearLayout>
 </FrameLayout>
