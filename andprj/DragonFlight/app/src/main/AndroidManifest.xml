@@ -13,9 +13,12 @@
         android:theme="@style/Theme.DragonFlight"
         tools:targetApi="31">
         <activity
-            android:name=".app.DragonFlightActivity"
-            android:screenOrientation="portrait"
+            android:name=".app.AssignmentActivity"
             android:exported="false" />
+        <activity
+            android:name=".app.DragonFlightActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".app.MainActivity"
             android:exported="true">
