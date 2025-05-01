@@ -20,19 +20,8 @@ public class HorzScrollBackground extends Sprite {
         super(bitmapResId);
         this.width = bitmap.getWidth() * Metrics.height / bitmap.getHeight();
         this.height = Metrics.height;
-        setPosition(Metrics.width / 2, Metrics.height / 2, width, Metrics.height);
+        setPosition(Metrics.width / 2, Metrics.height / 2, width, height);
         this.speed = speed;
-    }
-
-    public HorzScrollBackground setModeFullVert(boolean fullVert){
-        if(fullVert){
-            this.width = bitmap.getWidth() * Metrics.height / bitmap.getHeight();
-            this.height = Metrics.height;
-        }else{
-            this.width = bitmap.getWidth();
-            this.height = bitmap.getHeight();
-        }
-        return this;
     }
 
     @Override
@@ -47,27 +36,8 @@ public class HorzScrollBackground extends Sprite {
         if (curr > 0) curr -= width;
         while (curr < Metrics.width) {
             dstRect.set(curr, 0, curr + width, this.height);
-            if(this.height == bitmap.getHeight()){
-
-            }
             canvas.drawBitmap(bitmap, null, dstRect, null);
             curr += width;
-        }
-
-        if (GameView.drawsDebugStuffs) {
-            if (bboxPaint == null) {
-                bboxPaint = new Paint();
-                bboxPaint.setStyle(Paint.Style.STROKE);
-                bboxPaint.setColor(Color.RED);
-            }
-            curr = x % width;
-            if (curr > 0) curr -= width;
-            while (curr < Metrics.width) {
-                dstRect.set(curr, 0, curr + width, this.height);
-                canvas.drawRect(dstRect, bboxPaint);
-                curr += width;
-            }
-
         }
     }
 }

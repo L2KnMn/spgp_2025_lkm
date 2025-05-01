@@ -18,6 +18,6 @@ public class AssignmentScene extends Scene {
         initLayers(MainScene.Layer.COUNT);
 
         add(Layer.bg1, new HorzScrollBackground(R.mipmap.bg_city, 20));
-        add(Layer.bg2, new HorzScrollBackground(R.mipmap.clouds, 40).setModeFullVert(false));
+        add(Layer.bg2, new HorzScrollBackground(R.mipmap.clouds, 40));
     }
 }
